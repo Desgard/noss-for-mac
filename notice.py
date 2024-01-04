@@ -1,10 +1,11 @@
 import time
+import os
 
 from pynostr.key import PrivateKey
+from env import private_key
 import requests
-from win10toast import ToastNotifier
 
-identity_pk = PrivateKey.from_nsec("nsec1rt3we4wgp2qarm985esws45fgdcguzvxpryegp3jarhjh6lrk5cs4gzgsu")
+identity_pk = PrivateKey.from_nsec(private_key)
 
 
 def read():
@@ -20,6 +21,19 @@ def write(val):
         file.write(str(val))
     return val
 
+# The notifier function
+def notify(title, subtitle, message):
+    t = '-title {!r}'.format(title)
+    s = '-subtitle {!r}'.format(subtitle)
+    m = '-message {!r}'.format(message)
+    os.system('terminal-notifier {}'.format(' '.join([m, t, s])))
+
+# Calling the function
+# notify(title    = 'A Real Notification',
+#        subtitle = 'with python',
+#        message  = 'Hello, this is me, notifying you!')
+
+
 
 while True:
     responses = requests.get("https://api-worker.noscription.org/indexer/balance?npub="+"npub1tqw79k35z2m0mhenun3lkrwcgtghn4k8huqywrmatneya3swhtls4wn3s4")
@@ -27,9 +41,13 @@ while True:
     print(data)
     old = read()
     if data[0]['balance'] > old:
-        toaster = ToastNotifier()
-        toaster.show_toast("挖到了！！！", f"新增{data[0]['balance'] - old}个, 总量{data[0]['balance']}", duration=5)
+        # toaster = ToastNotifier()
+        # toaster.show_toast("挖到了！！！", f"新增{data[0]['balance'] - old}个, 总量{data[0]['balance']}", duration=5)
+        notify(title    = '挖到了',
+               subtitle = 'with python',
+               message  = f"新增{data[0]['balance'] - old}个, 总量{data[0]['balance']}")
         write(data[0]['balance'])
+        
     time.sleep(10)
 
 

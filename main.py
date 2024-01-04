@@ -13,6 +13,7 @@ import multiprocessing
 from pynostr.event import Event
 from pynostr.key import PrivateKey
 from pow import PowEvent
+from env import private_key
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 event_id_path = "event_id.txt"
@@ -269,7 +270,7 @@ def check_env():
 if __name__ == "__main__":
     process_list = []
     # 初始化钱包
-    identity_pk = PrivateKey.from_nsec("nsec1rt3we4wgp2qarm985esws45fgdcguzvxpryegp3jarhjh6lrk5cs4gzgsu")
+    identity_pk = PrivateKey.from_nsec(private_key)
     logging.info(f"Public key: {identity_pk.public_key.bech32()}")
     # 开启进程获取event_id的线程
     p1 = multiprocessing.Process(target=open_ws)
@@ -282,7 +283,7 @@ if __name__ == "__main__":
     # 检查环境
     check_env()
     try:
-        for i in range(30):
+        for i in range(5):
             process = multiprocessing.Process(target=mine_data_and_submit,
                                               args=(identity_pk,))
             process.start()
