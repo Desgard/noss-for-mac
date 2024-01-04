@@ -13,7 +13,7 @@ import multiprocessing
 from pynostr.event import Event
 from pynostr.key import PrivateKey
 from pow import PowEvent
-from env import private_key
+from env import private_key, work_count
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 event_id_path = "event_id.txt"
@@ -220,7 +220,7 @@ def mine_data_and_submit(identity_pk):
         e_copy = Event(
             content="{\"p\":\"nrc-20\",\"op\":\"mint\",\"tick\":\"noss\",\"amt\":\"10\"}",
             kind=1,
-            pubkey="9e7a9563e9fcba5ffb0acad3bf49f80b3530970342c29bbe991d2d5a333cf410",
+            pubkey="646a25e1b7aff1108f354a7596a4aa1898bb5c6aadd85794796fd90334bd9d20",
             tags=[
                 ["p", "9be107b0d7218c67b4954ee3e6bd9e4dba06ef937a93f684e42f730a0c3d053c"],
                 ["e", "51ed7939a984edee863bfbb2e66fdc80436b000a8ddca442d83e6a2bf1636a95",
@@ -283,7 +283,7 @@ if __name__ == "__main__":
     # 检查环境
     check_env()
     try:
-        for i in range(5):
+        for i in range(work_count):
             process = multiprocessing.Process(target=mine_data_and_submit,
                                               args=(identity_pk,))
             process.start()

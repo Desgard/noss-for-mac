@@ -2,10 +2,13 @@ import time
 import os
 
 from pynostr.key import PrivateKey
-from env import private_key
+from env import private_key, public_key
 import requests
+import logging
 
 identity_pk = PrivateKey.from_nsec(private_key)
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def read():
@@ -36,9 +39,9 @@ def notify(title, subtitle, message):
 
 
 while True:
-    responses = requests.get("https://api-worker.noscription.org/indexer/balance?npub="+"npub1tqw79k35z2m0mhenun3lkrwcgtghn4k8huqywrmatneya3swhtls4wn3s4")
+    responses = requests.get("https://api-worker.noscription.org/indexer/balance?npub="+public_key)
     data = responses.json()
-    print(data)
+    logging.info(data)
     old = read()
     if data[0]['balance'] > old:
         # toaster = ToastNotifier()
