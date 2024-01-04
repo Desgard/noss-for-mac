@@ -229,7 +229,7 @@ def mine_data_and_submit(identity_pk):
         )
         event_id, block_height, pre_addr = get_var(1), get_var(2), get_var(3)
         # TODO: 
-        logging.info(f" ##### e_copy: {e_copy}")
+        print("harry: ", e_copy)
         e_copy.tags.append(["e", event_id, "wss://relay.noscription.org/", "reply"])
         e_copy.tags.append(["seq_witness", block_height, pre_addr])
         e_copy.tags.append(["nonce", nonce(), "21"])
@@ -239,7 +239,6 @@ def mine_data_and_submit(identity_pk):
             if pe.calc_difficulty(e_copy) >= 21:
                 break
         # 还原被覆盖的参数 block_height
-        e_copy.created_at = now()
         sk = PrivateKey(bytes.fromhex(identity_pk.hex()))
         sig = sk.sign(bytes.fromhex(e_copy.id))
         e_copy.sig = sig.hex()
