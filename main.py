@@ -228,7 +228,8 @@ def mine_data_and_submit(identity_pk):
             ]
         )
         event_id, block_height, pre_addr = get_var(1), get_var(2), get_var(3)
-        e_copy.created_at = now()
+        # TODO: 
+        logging.info(f" ##### e_copy: {e_copy}")
         e_copy.tags.append(["e", event_id, "wss://relay.noscription.org/", "reply"])
         e_copy.tags.append(["seq_witness", block_height, pre_addr])
         e_copy.tags.append(["nonce", nonce(), "21"])
